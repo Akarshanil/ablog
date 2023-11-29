@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{post.title_tag}}{% endblock %}
+
+{% block content %}
+current user: {{ user.id }}
+                <h1>{{post.title}}--{{post.author.id}}</h1>
+                <small>by: {{post.author.first_name}} {{post.author.last_name}}-{{post.publication_date}}</small>
+                {% if user.is_authenticated %}
+                    {% if user.id == post.author.id %}
+                        - <a href="{% url 'update_post' post.pk %}">Edit</a>
+                        <a href="{% url 'delete_post' post.pk %}">Delete</a>
+                    {% endif %}
+                {% endif %}
+
+                <br>
+                <hr>
+                <br>
+                    {% if post.image %}
+                        <img src="{{post.image.url}}">
+                    {% endif %}
+<br>
+                {{post.body|safe}}
+<br>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+                <br><br>
+                <hr>
+                <br>
+                <form action="{% url 'like_post' post.pk %}" method="POST">
+                    {% csrf_token %}
+                    {% if user.is_authenticated %}
+
+                        {% if liked %}
+                        <button type="submit"  name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm">unlike</button>-
+                        {% else %}
+                        <button type="submit"  name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm">like</button>-
+                        {% endif %}
+                    {% else %}
+                        <small> <a class="" href="{% url 'login' %}">Login</a>to like</small>
+                    {% endif %}
+                    {{total_likes}}Likes
+
+                </form>
+                <br><br>
+                    <h2>Comments</h2>
+                    {% if not  post.comments.all %}
+                            sorry no comments
+                    {% else %}
+                        {% for i in post.comments.all %}
+                            <strong>{{i.name}}<--->{{i.date_added}}</strong>
+                            <br>
+                            {{i.body}}
+                        {% endfor %}
+
+                    {% endif %}
+
+
+
+                <br><br>
+                        <div class="card" style="width: 18rem;">
+                            {% if post.author.profile.profile_image %}
+
+                        <img class="card-img-top" src="{{post.author.profile.profile_image.url}}" alt="Card image cap">
+                            {% else %}
+                                <img class="card-img-top" src="{% static 'theblog/images/img.png' %}" alt="Card image cap">
+
+                            {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{post.author.first_name}}</h5>
+            <p class="card-text">{{post.author.profile.bio}}</p>
+              <p class="small text-muted">
+                  <a href="{% url 'user_profile' post.author.profile.id %}">show_profile</a>
+                  {% if post.author.profile.website_url %}
+                      |<a href="{{post.author.profile.website_url}}">twitter</a>
+                  {% endif %}
+                  {% if post.author.profile.website_url %}
+                        <a href="{{post.author.profile.website_url}}">facebook</a>
+                  {% endif %}
+                  <a href="{{post.author.profile.website_url}}">instagram</a>
+                  <a href="{{post.author.profile.website_url}}">website</a>   #like\that\all\to\check\if\it\is\there\or\not
+
+
+
+              </p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+ <br><br>
+                    <h2>Comments</h2>
+                    {% if not  post.comments.all %}
+                            sorry no comments <br><br><a href="{% url 'Add_comment' post.pk %}">Add One</a>
+                    {% else %}
+                        <a href="{% url 'Add_comment' post.pk %}">Add The Comments</a>
+                        {% for i in post.comments.all %}
+                            <strong>{{i.name}}<--->{{i.date_added}}</strong>
+                            <br>
+                            {{i.body}}
+                        {% endfor %}
+
+                    {% endif %}
+
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}register{% endblock %}
+{% block content %}
+<h1>Edit PROFILE</h1>
+{{user.profile.bio}}
+<br><br>
+<div class="form-group">
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <button class="btn btn-secondary">upadte_profile</button>
+</form>
+</div>
+
+{% endblock %}

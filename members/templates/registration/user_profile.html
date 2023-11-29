@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}User_profile{% endblock %}
+{% block content %}
+<h1>Userprofile</h1>
+<br><br>
+       {{ pageuser }}
+                        <div class="card" style="width: 18rem;">
+                            {% if pageuser.profile_image %}
+
+                        <img class="card-img-top" src="{{pageuser.profile_image.url}}" alt="Card image cap">
+                            {% else %}
+                                <img class="card-img-top" src="{% static 'theblog/images/img.png' %}" alt="Card image cap">
+
+                            {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{pageuser.user.first_name}}</h5>
+            <p class="card-text">{{pageuser.profile.bio}}</p>
+              <p class="small text-muted">
+                  {% if pageuser.website_url %}
+                      |<a href="{{pageuser.website_url}}">twitter</a>
+                  {% endif %}
+                  {% if pageuser.website_url %}
+                        <a href="{{ppageuser.website_url}}">facebook</a>
+                  {% endif %}
+                  <a href="{{pageuser.website_url}}">instagram</a>
+                  <a href="{{pageuser.website_url}}">website</a>
+
+
+              </p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+
+{% endblock %}
